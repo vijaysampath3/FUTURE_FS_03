@@ -2,9 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
-function AnimatedSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+function AnimatedSection({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   return (
     <motion.div
+      className={className}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
@@ -69,13 +70,13 @@ const gallery = [
   { img: `${IMG}/98b59b325_generated_c817acd9.png`, likes: "2.1K" },
 ];
 
-const features = [
-  { icon: "📸", title: "Insta-Perfect Every Corner", desc: "Every angle is designed for your feed." },
-  { icon: "🎨", title: "Weekly Limited Drops", desc: "New creations every Monday — never boring." },
-  { icon: "🌿", title: "Made Fresh Daily", desc: "No shortcuts. Every item is made from scratch." },
-  { icon: "🛋️", title: "Stay as Long as You Like", desc: "Cozy seating, free WiFi, zero rush." },
-  { icon: "🎁", title: "Custom Orders & Gifting", desc: "Cakes, hampers, and catering for every occasion." },
-  { icon: "🎵", title: "Live Music on Weekends", desc: "Acoustic sets every Saturday evening." },
+const whyFeatures = [
+  { num: '01', title: 'Insta-Perfect\nEvery Corner', image: 'https://media.base44.com/images/public/6a142babc9cc3adab8e62027/d4439b395_generated_image.png', },
+  { num: '02', title: 'Weekly Limited\nDrops', image: 'https://media.base44.com/images/public/6a142babc9cc3adab8e62027/a597d3fdb_generated_image.png', },
+  { num: '03', title: 'Made Fresh\nEvery Day', image: 'https://media.base44.com/images/public/6a142babc9cc3adab8e62027/a2f1a3640_generated_image.png', },
+  { num: '04', title: 'Stay as Long\nas You Like', image: 'https://media.base44.com/images/public/6a142babc9cc3adab8e62027/aff8eda58_generated_image.png', },
+  { num: '05', title: 'Custom Orders\n& Gifting', image: 'https://media.base44.com/images/public/6a142babc9cc3adab8e62027/b070845e1_generated_image.png', },
+  { num: '06', title: 'Live Music on\nWeekends', image: 'https://media.base44.com/images/public/6a142babc9cc3adab8e62027/73355e3c2_generated_image.png', },
 ];
 
 const testimonials = [
@@ -130,24 +131,26 @@ function Nav() {
           <span className="italic">Sugarbloom</span>
           <span className="text-gold">✦</span>
         </a>
-        <ul className="hidden items-center gap-9 md:flex">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className="text-[13px] uppercase tracking-[0.18em] text-cream/70 transition hover:text-gold"
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a
-          href="#contact"
-          className="hidden rounded-full bg-gold px-5 py-2 text-sm font-medium text-espresso transition hover:bg-gold-2 md:inline-block"
-        >
-          Visit Us
-        </a>
+        <div className="hidden items-center gap-9 md:flex">
+          <ul className="flex items-center gap-9">
+            {links.map((l) => (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  className="text-[13px] uppercase tracking-[0.18em] text-cream/70 transition hover:text-gold"
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a
+            href="#contact"
+            className="rounded-full bg-gold px-5 py-2 text-sm font-medium text-espresso transition hover:bg-gold-2"
+          >
+            Visit Us
+          </a>
+        </div>
         <button
           aria-label="Menu"
           onClick={() => setOpen((o) => !o)}
@@ -533,24 +536,63 @@ function Why() {
   return (
     <section className="bg-espresso-2 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="reveal mx-auto max-w-2xl text-center">
-          <span className="text-xs uppercase tracking-[0.28em] text-gold">The Experience</span>
+
+        {/* Header */}
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-xs uppercase tracking-[0.28em] text-gold">
+            The Experience
+          </span>
           <h2 className="mt-4 font-display text-4xl text-cream md:text-5xl">
             Why <em className="italic text-gold">Sugarbloom?</em>
           </h2>
-        </div>
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="reveal rounded-[22px] border border-white/10 bg-espresso p-8 transition hover:border-gold/50"
-            >
-              <div className="text-3xl">{f.icon}</div>
-              <h3 className="mt-5 font-display text-xl text-cream">{f.title}</h3>
-              <p className="mt-3 text-sm text-cream/65">{f.desc}</p>
-            </div>
+          <p className="text-cream/70 mt-5 max-w-md mx-auto text-base">
+            Six reasons locals choose us every single day — and keep coming back.
+          </p>
+        </AnimatedSection>
+
+        {/* 3-column grid x 2 rows */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {whyFeatures.map((f, i) => (
+            <AnimatedSection key={f.num} delay={i * 0.08}>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="group relative rounded-[22px] overflow-hidden aspect-[4/3] cursor-pointer shadow-2xl"
+              >
+                {/* Background image */}
+                <img
+                  src={f.image}
+                  alt={f.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+
+                {/* Dark gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-espresso via-espresso/40 to-black/10" />
+
+                {/* Number badge */}
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-gold text-espresso text-sm font-display w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+                  {f.num}
+                </div>
+
+                {/* Title at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="font-display text-cream text-2xl leading-tight text-center whitespace-pre-line">
+                    {f.title}
+                  </h3>
+                </div>
+              </motion.div>
+            </AnimatedSection>
           ))}
         </div>
+
+        {/* Bottom stat strip */}
+        <AnimatedSection delay={0.3} className="mt-14 flex flex-wrap justify-center items-center gap-6 text-cream/60 text-sm uppercase tracking-widest font-medium">
+          <span className="text-cream/80">200+ Items on Menu</span>
+          <span className="hidden sm:inline">|</span>
+          <span className="text-cream/80">4.9★ Google Rating</span>
+          <span className="hidden sm:inline">|</span>
+          <span className="text-cream/80">3 yrs Serving Vijayawada</span>
+        </AnimatedSection>
+
       </div>
     </section>
   );
