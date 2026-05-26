@@ -227,8 +227,11 @@ function Hero() {
             </a>
           </div>
         </div>
-        <div className="relative reveal">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
+        <div className="relative reveal md:ml-auto md:w-[90%] md:pr-6 lg:pr-10">
+          <div 
+            className="relative w-full overflow-hidden rounded-[20px] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]"
+            style={{ maxHeight: "min(520px, 75vh)", aspectRatio: "4/5" }}
+          >
             <img
               src={heroImg}
               alt="Sugarbloom specialty coffee and pastries"
