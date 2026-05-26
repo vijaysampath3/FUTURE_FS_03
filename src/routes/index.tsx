@@ -1,5 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+
+function AnimatedSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export const Route = createFileRoute("/")({
   component: SugarbloomPage,
@@ -94,9 +108,9 @@ function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   const links = [
     { href: "#about", label: "About" },
@@ -108,7 +122,7 @@ function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "backdrop-blur-md bg-espresso/80 border-b border-white/5 py-3" : "py-6"
+        scrolled ? "bg-espresso/95 backdrop-blur-md py-3 shadow-lg" : "bg-transparent py-5"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6">
@@ -176,7 +190,7 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden bg-espresso pt-36 pb-20 md:pt-44 md:pb-28">
+    <section id="top" className="relative overflow-hidden bg-espresso min-h-[85vh] flex flex-col justify-center pt-28 pb-12 md:pt-32 md:pb-16">
       <div
         className="pointer-events-none absolute inset-0 opacity-60"
         style={{
@@ -184,20 +198,20 @@ function Hero() {
             "radial-gradient(60% 50% at 20% 30%, rgba(201,133,58,0.18), transparent 60%), radial-gradient(50% 50% at 80% 70%, rgba(201,133,58,0.1), transparent 60%)",
         }}
       />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 md:grid-cols-2">
-        <div className="reveal">
+      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-14 px-6 md:grid-cols-2">
+        <div className="reveal self-center">
           <span className="inline-block rounded-full border border-gold/40 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-gold">
             Café · Bakery · Ice Cream
           </span>
-          <h1 className="mt-7 font-display text-5xl leading-[1.05] text-cream sm:text-6xl md:text-7xl">
+          <h1 className="mt-4 font-display text-5xl leading-[1.05] text-cream sm:text-6xl md:text-7xl">
             Where Every<br />
             Bite <em className="italic text-gold">Blooms.</em>
           </h1>
-          <p className="mt-7 max-w-md text-base leading-relaxed text-cream/70">
+          <p className="mt-5 max-w-md text-base leading-relaxed text-cream/70">
             Vijayawada's most Instagram-worthy café — handcrafted coffees, cloud-soft pastries, and
             artisan ice creams made with love.
           </p>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
+          <div className="mt-7 flex flex-wrap items-center gap-4">
             <a
               href="#menu"
               className="group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-medium text-espresso transition hover:bg-gold-2"
@@ -232,7 +246,7 @@ function Hero() {
           </div>
         </div>
       </div>
-      <div className="relative mx-auto mt-24 grid max-w-7xl grid-cols-3 gap-6 border-t border-white/10 px-6 pt-12 text-center">
+      <div className="relative mx-auto mt-12 grid w-full max-w-7xl grid-cols-3 gap-6 border-t border-white/10 px-6 pt-8 text-center">
         {[
           { n: "12K+", l: "Instagram Followers" },
           { n: "4.9★", l: "Google Rating" },
@@ -347,12 +361,13 @@ function MenuSection({
           <p className="mt-5 text-base text-ink/65">{intro}</p>
         </div>
         <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((it) => (
-            <article
-              key={it.name}
-              className="reveal group overflow-hidden rounded-[22px] border border-ink/10 bg-white transition hover:-translate-y-1 hover:shadow-2xl"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
+          {items.map((it, i) => (
+            <AnimatedSection key={it.name} delay={i * 0.1}>
+              <motion.article
+                whileHover={{ y: -6 }}
+                className="group overflow-hidden rounded-[22px] border border-ink/10 bg-white transition-shadow hover:shadow-2xl"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={it.img}
                   alt={it.name}
@@ -372,7 +387,8 @@ function MenuSection({
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-ink/65">{it.desc}</p>
               </div>
-            </article>
+              </motion.article>
+            </AnimatedSection>
           ))}
         </div>
       </div>
@@ -394,12 +410,13 @@ function IceCreamSection() {
           </p>
         </div>
         <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-          {iceItems.map((it) => (
-            <article
-              key={it.name}
-              className="reveal group overflow-hidden rounded-[22px] border border-rose/60 bg-white transition hover:-translate-y-1 hover:shadow-2xl"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
+          {iceItems.map((it, i) => (
+            <AnimatedSection key={it.name} delay={i * 0.1}>
+              <motion.article
+                whileHover={{ y: -6 }}
+                className="group overflow-hidden rounded-[22px] border border-rose/60 bg-white transition-shadow hover:shadow-2xl"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden">
                 <img src={it.img} alt={it.name} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 {it.tag && (
                   <span className="absolute left-4 top-4 rounded-full bg-rose px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#b9526a] backdrop-blur">
@@ -414,7 +431,8 @@ function IceCreamSection() {
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-ink/65">{it.desc}</p>
               </div>
-            </article>
+              </motion.article>
+            </AnimatedSection>
           ))}
         </div>
       </div>
