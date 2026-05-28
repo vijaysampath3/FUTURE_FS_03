@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MenuIcecreamRouteImport } from './routes/menu/icecream'
+import { Route as MenuCafeRouteImport } from './routes/menu/cafe'
+import { Route as MenuBakeryRouteImport } from './routes/menu/bakery'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MenuIcecreamRoute = MenuIcecreamRouteImport.update({
+  id: '/menu/icecream',
+  path: '/menu/icecream',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MenuCafeRoute = MenuCafeRouteImport.update({
+  id: '/menu/cafe',
+  path: '/menu/cafe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MenuBakeryRoute = MenuBakeryRouteImport.update({
+  id: '/menu/bakery',
+  path: '/menu/bakery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/menu/bakery': typeof MenuBakeryRoute
+  '/menu/cafe': typeof MenuCafeRoute
+  '/menu/icecream': typeof MenuIcecreamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/menu/bakery': typeof MenuBakeryRoute
+  '/menu/cafe': typeof MenuCafeRoute
+  '/menu/icecream': typeof MenuIcecreamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/menu/bakery': typeof MenuBakeryRoute
+  '/menu/cafe': typeof MenuCafeRoute
+  '/menu/icecream': typeof MenuIcecreamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/menu/bakery' | '/menu/cafe' | '/menu/icecream'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/menu/bakery' | '/menu/cafe' | '/menu/icecream'
+  id: '__root__' | '/' | '/menu/bakery' | '/menu/cafe' | '/menu/icecream'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MenuBakeryRoute: typeof MenuBakeryRoute
+  MenuCafeRoute: typeof MenuCafeRoute
+  MenuIcecreamRoute: typeof MenuIcecreamRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/menu/icecream': {
+      id: '/menu/icecream'
+      path: '/menu/icecream'
+      fullPath: '/menu/icecream'
+      preLoaderRoute: typeof MenuIcecreamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/menu/cafe': {
+      id: '/menu/cafe'
+      path: '/menu/cafe'
+      fullPath: '/menu/cafe'
+      preLoaderRoute: typeof MenuCafeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/menu/bakery': {
+      id: '/menu/bakery'
+      path: '/menu/bakery'
+      fullPath: '/menu/bakery'
+      preLoaderRoute: typeof MenuBakeryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MenuBakeryRoute: MenuBakeryRoute,
+  MenuCafeRoute: MenuCafeRoute,
+  MenuIcecreamRoute: MenuIcecreamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

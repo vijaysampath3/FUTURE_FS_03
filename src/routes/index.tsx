@@ -1,6 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import Nav from "../components/Nav";
+
 
 function AnimatedSection({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   return (
@@ -105,91 +107,7 @@ function useReveal() {
   }, []);
 }
 
-function Nav() {
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  const links = [
-    { href: "#about", label: "About" },
-    { href: "#menu", label: "Menu" },
-    { href: "#gallery", label: "Gallery" },
-    { href: "#specials", label: "Specials" },
-    { href: "#contact", label: "Contact" },
-  ];
-  return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-espresso/95 backdrop-blur-md py-3 shadow-lg" : "bg-transparent py-5"
-      }`}
-    >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center gap-2 font-display text-2xl text-cream">
-          <span className="italic">Sugarbloom</span>
-          <span className="text-gold">✦</span>
-        </a>
-        <div className="hidden items-center gap-9 md:flex">
-          <ul className="flex items-center gap-9">
-            {links.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  className="text-[13px] uppercase tracking-[0.18em] text-cream/70 transition hover:text-gold"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a
-            href="#contact"
-            className="rounded-full bg-gold px-5 py-2 text-sm font-medium text-espresso transition hover:bg-gold-2"
-          >
-            Visit Us
-          </a>
-        </div>
-        <button
-          aria-label="Menu"
-          onClick={() => setOpen((o) => !o)}
-          className="text-cream md:hidden"
-        >
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-            {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-          </svg>
-        </button>
-      </nav>
-      {open && (
-        <div className="border-t border-white/5 bg-espresso/95 backdrop-blur-md md:hidden">
-          <ul className="space-y-1 px-6 py-4">
-            {links.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="block py-2 text-sm uppercase tracking-[0.18em] text-cream/80"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                href="#contact"
-                onClick={() => setOpen(false)}
-                className="mt-2 inline-block rounded-full bg-gold px-5 py-2 text-sm font-medium text-espresso"
-              >
-                Visit Us
-              </a>
-            </li>
-          </ul>
-        </div>
-      )}
-    </header>
-  );
-}
+
 
 function Hero() {
   return (
@@ -345,6 +263,8 @@ function MenuSection({
   intro,
   items,
   accent = "gold",
+  buttonText,
+  buttonLink,
 }: {
   id?: string;
   kicker: string;
@@ -353,6 +273,8 @@ function MenuSection({
   intro: string;
   items: MenuItem[];
   accent?: "gold" | "rose";
+  buttonText?: string;
+  buttonLink?: string;
 }) {
   const accentBg = accent === "rose" ? "bg-rose" : "bg-gold/15";
   const accentText = accent === "rose" ? "text-rose-900" : "text-gold";
@@ -397,6 +319,16 @@ function MenuSection({
             </AnimatedSection>
           ))}
         </div>
+        {buttonText && buttonLink && (
+          <AnimatedSection delay={0.2} className="mt-10 flex justify-center">
+            <Link
+              to={buttonLink}
+              className="inline-block rounded-full border border-gold px-8 py-3 text-sm font-semibold tracking-wide text-gold transition-all duration-300 hover:bg-gold hover:text-espresso"
+            >
+              {buttonText}
+            </Link>
+          </AnimatedSection>
+        )}
       </div>
     </section>
   );
@@ -441,6 +373,14 @@ function IceCreamSection() {
             </AnimatedSection>
           ))}
         </div>
+        <AnimatedSection delay={0.2} className="mt-10 flex justify-center">
+          <Link
+            to="/menu/icecream"
+            className="inline-block rounded-full border border-[#b9526a] px-8 py-3 text-sm font-semibold tracking-wide text-[#b9526a] transition-all duration-300 hover:bg-[#b9526a] hover:text-white"
+          >
+            View All Flavours →
+          </Link>
+        </AnimatedSection>
       </div>
     </section>
   );
@@ -495,7 +435,7 @@ function Gallery() {
         <div className="reveal text-center">
           <span className="text-xs uppercase tracking-[0.28em] text-gold">#SugarbloomVibes</span>
           <h2 className="mt-4 font-display text-4xl md:text-5xl">
-            Instagram <em className="italic text-gold">Gallery</em>
+            Captured at <em className="italic text-gold">Sugarbloom</em>
           </h2>
         </div>
         <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -733,6 +673,8 @@ function SugarbloomPage() {
           titleAccent="Coffees"
           intro="Every cup tells a story. Specialty beans, seasonal flavors, and barista-crafted perfection."
           items={cafeItems}
+          buttonText="View All Coffees →"
+          buttonLink="/menu/cafe"
         />
         <MenuSection
           id="bakery"
@@ -741,6 +683,8 @@ function SugarbloomPage() {
           titleAccent="Our Oven"
           intro="From Parisian-style croissants to viral cloud cakes — baked fresh every single morning."
           items={bakeryItems}
+          buttonText="View Full Bakery Menu →"
+          buttonLink="/menu/bakery"
         />
         <IceCreamSection />
       </div>
