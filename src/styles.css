@@ -6,7 +6,7 @@
 
 @theme inline {
   --font-display: "Playfair Display", Georgia, serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-body: "Outfit", system-ui, sans-serif;
   --color-espresso: #1e0a02;
   --color-espresso-2: #2a1108;
   --color-cream: #fdf6ee;
@@ -35,7 +35,7 @@
   body {
     background: #1e0a02;
     color: #fdf6ee;
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: "Outfit", system-ui, sans-serif;
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
   }
